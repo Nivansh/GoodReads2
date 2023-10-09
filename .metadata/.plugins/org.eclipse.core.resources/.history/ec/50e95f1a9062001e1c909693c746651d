@@ -1,0 +1,51 @@
+package com.example2.service;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+import com.example2.model.Book;
+import com.example2.repository.BookJpaRepository;
+import com.example2.repository.BookRepository;
+@Service
+
+public class BookJpaService  implements BookRepository
+{
+	
+	@Autowired
+	private BookJpaRepository bookJpaRepository;
+	
+	public ArrayList<Book> getBooks()
+	{
+		List<Book> bookList=bookJpaRepository.findAll();
+		ArrayList<Book> books=new ArrayList<>(bookList);
+		return books;	
+	}
+	
+	public Book addBook(Book book)
+	{
+		bookJpaRepository.save(book);
+		return book;
+	}
+	
+	public Book getBookById(int bookId)
+	{
+		try
+		{
+			Book book= bookJpaRepository.findById(bookId).get();
+			return book;
+		}
+		catch(Exception e)
+		{
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+		
+	}
+	
+	
+	
+
+
+}
+
